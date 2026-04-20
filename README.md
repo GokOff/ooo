@@ -26,4 +26,67 @@ flowchart TB
 
 ```
 
+```mermaid
+classDiagram
+    class User {
+        +int Id
+        +string Email
+        +string PasswordHash
+        +Register() bool
+        +Login() bool
+    }
+    class Menu {
+        +Guid Id
+        +string Title
+        +List~Category~ Categories
+        +GenerateQRCode() byte[]
+    }
+    class Category {
+        +int Id
+        +string Name
+        +List~Dish~ Dishes
+    }
+    class Dish {
+        +int Id
+        +string Name
+        +decimal Price
+        +string ImagePath
+        +UpdateInfo()
+    }
+    class QRCodeGenerator {
+        +string BaseUrl
+        +CreateCode(string url) byte[]
+    }
 
+    User "1" -- "many" Menu : володіє
+    Menu "1" *-- "many" Category : містить
+    Category "1" *-- "many" Dish : містить
+    Menu ..> QRCodeGenerator : використовує
+
+```
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Admin as Адміністратор
+    participant UI as Веб-інтерфейс
+    participant API as MenuService
+    participant QR as QRGenerator
+    participant DB as Database
+
+    Admin->>UI: Додає страву (назва, ціна)
+    UI->>API: SaveDish(dishData)
+    activate API
+    API->>DB: Зберегти у БД
+    DB-->>API: Success
+    API-->>UI: Підтвердження створення
+    deactivate API
+
+    Admin->>UI: Запит на генерацію QR
+    UI->>API: GetQRCode(menuId)
+    activate API
+    API->>QR: CreateCode(url)
+    QR-->>API: ImageBytes (PNG)
+    API-->>UI: Відобразити QR на екрані
+    deactivate API
+
+```

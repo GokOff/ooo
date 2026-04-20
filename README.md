@@ -1,6 +1,9 @@
-useCaseDiagram
-    accTitle: Digital Menu System
-    accDescr: Use case diagram for Administrator
+
+```mermaid
+
+
+flowchart TB
+    Admin([Адміністратор])
 
     subgraph "Digital Menu System"
         UC_Auth(Реєстрація/Вхід)
@@ -10,14 +13,17 @@ useCaseDiagram
         UC_QR(Генерація QR-коду)
     end
 
-    Admin((Адміністратор))
-
     Admin --> UC_Auth
     Admin --> UC_Cat
     Admin --> UC_Dish
     Admin --> UC_QR
 
-    UC_Dish -.-> UC_Photo : <<extend>>
-    UC_Cat -.-> UC_Auth : <<include>>
-    UC_Dish -.-> UC_Auth : <<include>>
-    UC_QR -.-> UC_Auth : <<include>>
+    UC_Dish -.->|extend| UC_Photo
+    UC_Cat -.->|include| UC_Auth
+    UC_Dish -.->|include| UC_Auth
+    UC_QR -.->|include| UC_Auth
+
+
+```
+
+
